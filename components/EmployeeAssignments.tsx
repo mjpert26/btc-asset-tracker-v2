@@ -1,148 +1,153 @@
 "use client";
 import { motion } from "framer-motion";
-import { User, Laptop, Monitor, Keyboard } from "lucide-react";
+import { Laptop, Monitor, Keyboard, Mouse } from "lucide-react";
 
 const employees = [
   {
     id: 1,
     name: "Sarah Johnson",
     department: "Engineering",
-    email: "sarah.j@company.com",
+    avatar: "SJ",
     assignments: [
-      { type: "Laptop", model: "Dell XPS 15", serial: "DL-1001" },
-      { type: "Monitor", model: "LG 27UK850", serial: "LG-2001" },
-      { type: "Keyboard", model: "Logitech MX Keys", serial: "LT-3001" }
-    ]
+      { type: "Laptop", model: "MacBook Pro 16\" M3", icon: Laptop },
+      { type: "Monitor", model: "Dell U2723DE", icon: Monitor },
+      { type: "Keyboard", model: "Logitech MX Keys", icon: Keyboard },
+      { type: "Mouse", model: "Logitech MX Master 3", icon: Mouse },
+    ],
   },
   {
     id: 2,
     name: "Michael Chen",
     department: "Design",
-    email: "michael.c@company.com",
+    avatar: "MC",
     assignments: [
-      { type: "Laptop", model: "HP ZBook Studio", serial: "HP-1005" },
-      { type: "Monitor", model: "Samsung Odyssey G7", serial: "SM-2004" },
-      { type: "Mouse", model: "Logitech MX Master 3", serial: "LT-3006" }
-    ]
+      { type: "Laptop", model: "MacBook Pro 14\" M3", icon: Laptop },
+      { type: "Monitor", model: "LG UltraFine 27\"", icon: Monitor },
+      { type: "Mouse", model: "Apple Magic Mouse", icon: Mouse },
+    ],
   },
   {
     id: 3,
     name: "Emily Rodriguez",
     department: "Marketing",
-    email: "emily.r@company.com",
+    avatar: "ER",
     assignments: [
-      { type: "Laptop", model: "Lenovo ThinkPad X1", serial: "LN-1007" },
-      { type: "Monitor", model: "LG UltraWide 34", serial: "LG-2007" }
-    ]
+      { type: "Laptop", model: "Dell XPS 15", icon: Laptop },
+      { type: "Monitor", model: "Samsung 32\" 4K", icon: Monitor },
+      { type: "Keyboard", model: "Microsoft Ergonomic", icon: Keyboard },
+    ],
   },
   {
     id: 4,
-    name: "James Wilson",
-    department: "Sales",
-    email: "james.w@company.com",
+    name: "David Park",
+    department: "Engineering",
+    avatar: "DP",
     assignments: [
-      { type: "Laptop", model: "Dell Latitude 7420", serial: "DL-1010" },
-      { type: "Monitor", model: "Samsung 24 Basic", serial: "SM-2010" },
-      { type: "Headset", model: "Logitech Zone Wireless", serial: "LT-3010" }
-    ]
+      { type: "Laptop", model: "MacBook Air M2", icon: Laptop },
+      { type: "Monitor", model: "Dell U2723DE", icon: Monitor },
+      { type: "Keyboard", model: "Apple Magic Keyboard", icon: Keyboard },
+      { type: "Mouse", model: "Logitech MX Master 3", icon: Mouse },
+    ],
   },
   {
     id: 5,
-    name: "Lisa Park",
-    department: "HR",
-    email: "lisa.p@company.com",
+    name: "Jessica Williams",
+    department: "Sales",
+    avatar: "JW",
     assignments: [
-      { type: "Laptop", model: "HP EliteBook 840", serial: "HP-1012" },
-      { type: "Monitor", model: "LG 24MK430H", serial: "LG-2012" }
-    ]
+      { type: "Laptop", model: "HP EliteBook 840", icon: Laptop },
+      { type: "Mouse", model: "Logitech MX Anywhere 3", icon: Mouse },
+    ],
   },
   {
     id: 6,
-    name: "David Kim",
+    name: "Ryan Martinez",
     department: "Engineering",
-    email: "david.k@company.com",
+    avatar: "RM",
     assignments: [
-      { type: "Laptop", model: "Lenovo ThinkPad P15", serial: "LN-1014" },
-      { type: "Monitor", model: "Samsung Odyssey G5", serial: "SM-2014" },
-      { type: "Keyboard", model: "Logitech K380", serial: "LT-3014" }
-    ]
-  }
+      { type: "Laptop", model: "ThinkPad X1 Carbon", icon: Laptop },
+      { type: "Monitor", model: "BenQ PD3220U", icon: Monitor },
+      { type: "Keyboard", model: "Keychron K8", icon: Keyboard },
+    ],
+  },
+  {
+    id: 7,
+    name: "Amanda Taylor",
+    department: "HR",
+    avatar: "AT",
+    assignments: [
+      { type: "Laptop", model: "MacBook Air M2", icon: Laptop },
+      { type: "Monitor", model: "Dell P2422H", icon: Monitor },
+    ],
+  },
+  {
+    id: 8,
+    name: "James Anderson",
+    department: "Finance",
+    avatar: "JA",
+    assignments: [
+      { type: "Laptop", model: "Dell Latitude 7430", icon: Laptop },
+      { type: "Monitor", model: "HP Z27", icon: Monitor },
+      { type: "Keyboard", model: "Logitech K380", icon: Keyboard },
+      { type: "Mouse", model: "Logitech M720", icon: Mouse },
+    ],
+  },
 ];
-
-const getIconForType = (type: string) => {
-  switch (type.toLowerCase()) {
-    case "laptop":
-      return <Laptop className="w-4 h-4" />;
-    case "monitor":
-      return <Monitor className="w-4 h-4" />;
-    case "keyboard":
-    case "mouse":
-    case "headset":
-      return <Keyboard className="w-4 h-4" />;
-    default:
-      return <Laptop className="w-4 h-4" />;
-  }
-};
 
 export default function EmployeeAssignments() {
   return (
-    <section className="py-16 px-6 bg-[#09090B]">
-      <div className="max-w-7xl mx-auto">
-        <motion.div
-          initial={{ opacity: 0, y: 20 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.5 }}
-          className="mb-12"
-        >
-          <h2 className="text-4xl font-bold text-white mb-4">Employee Assignments</h2>
-          <p className="text-gray-400 text-lg">View equipment assigned to each employee</p>
-        </motion.div>
+    <section className="py-8">
+      <div className="mb-8">
+        <h2 className="text-2xl font-bold text-white mb-2">Employee Assignments</h2>
+        <p className="text-gray-400">View equipment assigned to each employee</p>
+      </div>
 
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-          {employees.map((employee, index) => (
-            <motion.div
-              key={employee.id}
-              initial={{ opacity: 0, y: 20 }}
-              animate={{ opacity: 1, y: 0 }}
-              transition={{ duration: 0.5, delay: index * 0.1 }}
-              className="bg-white/5 backdrop-blur border border-white/10 rounded-2xl p-6 hover:bg-white/10 transition-all duration-300"
-            >
-              <div className="flex items-start gap-4 mb-6">
-                <div className="w-12 h-12 rounded-full bg-gradient-to-br from-[#1E40AF] to-[#3B82F6] flex items-center justify-center flex-shrink-0">
-                  <User className="w-6 h-6 text-white" />
-                </div>
-                <div className="flex-1 min-w-0">
-                  <h3 className="text-xl font-semibold text-white mb-1">{employee.name}</h3>
-                  <p className="text-sm text-[#3B82F6] mb-1">{employee.department}</p>
-                  <p className="text-xs text-gray-400 truncate">{employee.email}</p>
-                </div>
+      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
+        {employees.map((employee, index) => (
+          <motion.div
+            key={employee.id}
+            initial={{ opacity: 0, y: 20 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ delay: index * 0.1 }}
+            className="bg-gradient-to-br from-[#1E40AF]/20 via-[#0F172A] to-[#0F172A] border-2 border-[#1E40AF]/30 rounded-2xl p-6 hover:border-[#3B82F6]/50 transition-all duration-300"
+          >
+            <div className="flex items-center gap-4 mb-6">
+              <div className="w-14 h-14 rounded-full bg-gradient-to-br from-[#1E40AF] to-[#3B82F6] flex items-center justify-center text-white font-bold text-lg">
+                {employee.avatar}
               </div>
+              <div>
+                <h3 className="text-white font-semibold text-lg">{employee.name}</h3>
+                <p className="text-gray-400 text-sm">{employee.department}</p>
+              </div>
+            </div>
 
-              <div className="space-y-3">
-                <div className="flex items-center justify-between mb-2">
-                  <span className="text-sm font-medium text-gray-300">Assigned Equipment</span>
-                  <span className="text-xs text-gray-500 bg-white/5 px-2 py-1 rounded-full">
-                    {employee.assignments.length} items
-                  </span>
-                </div>
-                {employee.assignments.map((assignment, idx) => (
+            <div className="space-y-3">
+              {employee.assignments.map((assignment, i) => {
+                const Icon = assignment.icon;
+                return (
                   <div
-                    key={idx}
-                    className="flex items-center gap-3 p-3 bg-white/5 rounded-lg border border-white/5 hover:border-[#1E40AF]/30 transition-colors"
+                    key={i}
+                    className="flex items-start gap-3 p-3 bg-white/5 rounded-lg border border-white/10"
                   >
-                    <div className="text-[#3B82F6]">
-                      {getIconForType(assignment.type)}
+                    <div className="w-8 h-8 rounded-lg bg-[#1E40AF]/20 flex items-center justify-center flex-shrink-0">
+                      <Icon className="w-4 h-4 text-[#3B82F6]" />
                     </div>
                     <div className="flex-1 min-w-0">
-                      <p className="text-sm font-medium text-white truncate">{assignment.model}</p>
-                      <p className="text-xs text-gray-400">{assignment.serial}</p>
+                      <p className="text-xs text-gray-400">{assignment.type}</p>
+                      <p className="text-sm text-white truncate">{assignment.model}</p>
                     </div>
                   </div>
-                ))}
-              </div>
-            </motion.div>
-          ))}
-        </div>
+                );
+              })}
+            </div>
+
+            <div className="mt-4 pt-4 border-t border-white/10">
+              <p className="text-xs text-gray-400 text-center">
+                {employee.assignments.length} {employee.assignments.length === 1 ? "item" : "items"} assigned
+              </p>
+            </div>
+          </motion.div>
+        ))}
       </div>
     </section>
   );

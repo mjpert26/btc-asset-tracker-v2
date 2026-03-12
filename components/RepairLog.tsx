@@ -1,203 +1,171 @@
 "use client";
 import { motion } from "framer-motion";
-import { Wrench, Calendar, AlertCircle } from "lucide-react";
+import { Wrench, Clock, CheckCircle, AlertCircle } from "lucide-react";
 
-interface RepairTicket {
-  id: string;
-  assetId: string;
-  assetName: string;
-  issue: string;
-  status: "Open" | "In Progress" | "Resolved" | "On Hold";
-  date: string;
-  priority: "Low" | "Medium" | "High";
-}
+const repairs = [
+  {
+    id: "TKT-001",
+    asset: "Dell Latitude 5520 (LAP-001)",
+    issue: "Screen flickering intermittently",
+    status: "In Progress",
+    submitted: "2024-01-15",
+    technician: "Mike Chen"
+  },
+  {
+    id: "TKT-002",
+    asset: "ThinkPad X1 Carbon (LAP-008)",
+    issue: "Battery not charging",
+    status: "Open",
+    submitted: "2024-01-16",
+    technician: "Unassigned"
+  },
+  {
+    id: "TKT-003",
+    asset: "Dell UltraSharp 27 (MON-004)",
+    issue: "Dead pixels in upper right corner",
+    status: "Resolved",
+    submitted: "2024-01-10",
+    technician: "Sarah Johnson"
+  },
+  {
+    id: "TKT-004",
+    asset: "MacBook Pro 14 (LAP-003)",
+    issue: "Keyboard keys sticking",
+    status: "In Progress",
+    submitted: "2024-01-14",
+    technician: "Mike Chen"
+  },
+  {
+    id: "TKT-005",
+    asset: "Logitech MX Master 3 (MSE-002)",
+    issue: "Scroll wheel not working",
+    status: "Resolved",
+    submitted: "2024-01-08",
+    technician: "Sarah Johnson"
+  },
+  {
+    id: "TKT-006",
+    asset: "HP EliteBook 840 (LAP-006)",
+    issue: "Overheating during heavy use",
+    status: "Open",
+    submitted: "2024-01-17",
+    technician: "Unassigned"
+  },
+  {
+    id: "TKT-007",
+    asset: "Dell P2722H (MON-007)",
+    issue: "No display output",
+    status: "In Progress",
+    submitted: "2024-01-13",
+    technician: "Mike Chen"
+  },
+  {
+    id: "TKT-008",
+    asset: "ThinkPad T14 (LAP-009)",
+    issue: "WiFi connectivity issues",
+    status: "Resolved",
+    submitted: "2024-01-09",
+    technician: "Sarah Johnson"
+  },
+  {
+    id: "TKT-009",
+    asset: "Logitech K380 (KBD-005)",
+    issue: "Keys not registering",
+    status: "Open",
+    submitted: "2024-01-16",
+    technician: "Unassigned"
+  },
+  {
+    id: "TKT-010",
+    asset: "CalDigit TS3 Plus (DOC-003)",
+    issue: "USB ports not functioning",
+    status: "In Progress",
+    submitted: "2024-01-15",
+    technician: "Mike Chen"
+  }
+];
+
+const getStatusColor = (status: string) => {
+  switch (status) {
+    case "Resolved":
+      return "bg-green-500/20 text-green-400 border-green-500/30";
+    case "In Progress":
+      return "bg-blue-500/20 text-blue-400 border-blue-500/30";
+    case "Open":
+      return "bg-yellow-500/20 text-yellow-400 border-yellow-500/30";
+    default:
+      return "bg-gray-500/20 text-gray-400 border-gray-500/30";
+  }
+};
+
+const getStatusIcon = (status: string) => {
+  switch (status) {
+    case "Resolved":
+      return <CheckCircle className="w-4 h-4" />;
+    case "In Progress":
+      return <Wrench className="w-4 h-4" />;
+    case "Open":
+      return <AlertCircle className="w-4 h-4" />;
+    default:
+      return <Clock className="w-4 h-4" />;
+  }
+};
 
 export default function RepairLog() {
-  const repairTickets: RepairTicket[] = [
-    {
-      id: "TKT-001",
-      assetId: "LAP-001",
-      assetName: "Dell Latitude 5420",
-      issue: "Screen flickering intermittently",
-      status: "In Progress",
-      date: "2024-01-15",
-      priority: "High"
-    },
-    {
-      id: "TKT-002",
-      assetId: "MON-003",
-      assetName: "LG UltraWide 34WN80C",
-      issue: "No display output",
-      status: "Open",
-      date: "2024-01-14",
-      priority: "High"
-    },
-    {
-      id: "TKT-003",
-      assetId: "LAP-005",
-      assetName: "HP EliteBook 840",
-      issue: "Battery not charging",
-      status: "Resolved",
-      date: "2024-01-12",
-      priority: "Medium"
-    },
-    {
-      id: "TKT-004",
-      assetId: "KEY-002",
-      assetName: "Logitech MX Keys",
-      issue: "Some keys not responding",
-      status: "In Progress",
-      date: "2024-01-10",
-      priority: "Low"
-    },
-    {
-      id: "TKT-005",
-      assetId: "LAP-008",
-      assetName: "Lenovo ThinkPad X1",
-      issue: "Overheating during heavy use",
-      status: "On Hold",
-      date: "2024-01-09",
-      priority: "Medium"
-    },
-    {
-      id: "TKT-006",
-      assetId: "MOU-004",
-      assetName: "Logitech MX Master 3",
-      issue: "Scroll wheel malfunction",
-      status: "Resolved",
-      date: "2024-01-08",
-      priority: "Low"
-    },
-    {
-      id: "TKT-007",
-      assetId: "MON-007",
-      assetName: "Samsung Odyssey G5",
-      issue: "Dead pixels on screen",
-      status: "Open",
-      date: "2024-01-07",
-      priority: "Medium"
-    },
-    {
-      id: "TKT-008",
-      assetId: "LAP-012",
-      assetName: "Dell XPS 15",
-      issue: "Touchpad not working",
-      status: "In Progress",
-      date: "2024-01-05",
-      priority: "High"
-    }
-  ];
-
-  const getStatusColor = (status: string) => {
-    switch (status) {
-      case "Open":
-        return "bg-yellow-500/20 text-yellow-400 border-yellow-500/30";
-      case "In Progress":
-        return "bg-blue-500/20 text-blue-400 border-blue-500/30";
-      case "Resolved":
-        return "bg-green-500/20 text-green-400 border-green-500/30";
-      case "On Hold":
-        return "bg-gray-500/20 text-gray-400 border-gray-500/30";
-      default:
-        return "bg-gray-500/20 text-gray-400 border-gray-500/30";
-    }
-  };
-
-  const getPriorityColor = (priority: string) => {
-    switch (priority) {
-      case "High":
-        return "text-red-400";
-      case "Medium":
-        return "text-yellow-400";
-      case "Low":
-        return "text-green-400";
-      default:
-        return "text-gray-400";
-    }
-  };
-
   return (
-    <section className="py-24 px-6">
+    <section className="py-8 px-6">
       <div className="max-w-7xl mx-auto">
         <motion.div
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.5 }}
-          className="mb-12"
         >
-          <div className="flex items-center gap-3 mb-4">
-            <Wrench className="w-8 h-8 text-blue-500" />
-            <h2 className="text-4xl font-bold text-white">Repair Log</h2>
+          <div className="flex items-center justify-between mb-6">
+            <h2 className="text-3xl font-bold text-white">Repair Log</h2>
+            <div className="flex items-center gap-2 text-sm text-gray-400">
+              <Wrench className="w-4 h-4" />
+              <span>{repairs.filter(r => r.status !== "Resolved").length} Active Tickets</span>
+            </div>
           </div>
-          <p className="text-gray-400 text-lg">
-            Track and manage equipment repair tickets
-          </p>
-        </motion.div>
 
-        <motion.div
-          initial={{ opacity: 0, y: 20 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.5, delay: 0.1 }}
-          className="bg-white/5 backdrop-blur-lg border border-white/10 rounded-2xl p-8 overflow-hidden"
-        >
-          <div className="overflow-x-auto">
-            <table className="w-full">
-              <thead>
-                <tr className="border-b border-white/10">
-                  <th className="text-left py-4 px-4 text-gray-400 font-semibold">Ticket ID</th>
-                  <th className="text-left py-4 px-4 text-gray-400 font-semibold">Asset</th>
-                  <th className="text-left py-4 px-4 text-gray-400 font-semibold">Issue</th>
-                  <th className="text-left py-4 px-4 text-gray-400 font-semibold">Priority</th>
-                  <th className="text-left py-4 px-4 text-gray-400 font-semibold">Status</th>
-                  <th className="text-left py-4 px-4 text-gray-400 font-semibold">Date</th>
-                </tr>
-              </thead>
-              <tbody>
-                {repairTickets.map((ticket, index) => (
-                  <motion.tr
-                    key={ticket.id}
-                    initial={{ opacity: 0, x: -20 }}
-                    animate={{ opacity: 1, x: 0 }}
-                    transition={{ duration: 0.3, delay: index * 0.05 }}
-                    className="border-b border-white/5 hover:bg-white/5 transition-colors"
-                  >
-                    <td className="py-4 px-4">
-                      <span className="text-blue-400 font-mono font-semibold">
-                        {ticket.id}
-                      </span>
-                    </td>
-                    <td className="py-4 px-4">
-                      <div>
-                        <div className="text-white font-medium">{ticket.assetName}</div>
-                        <div className="text-sm text-gray-500 font-mono">{ticket.assetId}</div>
-                      </div>
-                    </td>
-                    <td className="py-4 px-4">
-                      <div className="flex items-start gap-2">
-                        <AlertCircle className="w-4 h-4 text-gray-400 mt-1 flex-shrink-0" />
-                        <span className="text-gray-300">{ticket.issue}</span>
-                      </div>
-                    </td>
-                    <td className="py-4 px-4">
-                      <span className={`font-semibold ${getPriorityColor(ticket.priority)}`}>
-                        {ticket.priority}
-                      </span>
-                    </td>
-                    <td className="py-4 px-4">
-                      <span className={`inline-flex items-center px-3 py-1 rounded-full text-sm font-medium border ${getStatusColor(ticket.status)}`}>
-                        {ticket.status}
-                      </span>
-                    </td>
-                    <td className="py-4 px-4">
-                      <div className="flex items-center gap-2 text-gray-400">
-                        <Calendar className="w-4 h-4" />
-                        <span>{ticket.date}</span>
-                      </div>
-                    </td>
-                  </motion.tr>
-                ))}
-              </tbody>
-            </table>
+          <div className="bg-[#0F172A] border border-white/10 rounded-2xl overflow-hidden">
+            <div className="overflow-x-auto">
+              <table className="w-full">
+                <thead>
+                  <tr className="border-b border-white/10">
+                    <th className="px-6 py-4 text-left text-sm font-semibold text-gray-400">Ticket ID</th>
+                    <th className="px-6 py-4 text-left text-sm font-semibold text-gray-400">Asset</th>
+                    <th className="px-6 py-4 text-left text-sm font-semibold text-gray-400">Issue</th>
+                    <th className="px-6 py-4 text-left text-sm font-semibold text-gray-400">Status</th>
+                    <th className="px-6 py-4 text-left text-sm font-semibold text-gray-400">Submitted</th>
+                    <th className="px-6 py-4 text-left text-sm font-semibold text-gray-400">Technician</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  {repairs.map((repair, index) => (
+                    <motion.tr
+                      key={repair.id}
+                      initial={{ opacity: 0, y: 10 }}
+                      animate={{ opacity: 1, y: 0 }}
+                      transition={{ duration: 0.3, delay: index * 0.05 }}
+                      className="border-b border-white/5 hover:bg-white/5 transition-colors"
+                    >
+                      <td className="px-6 py-4 text-sm font-medium text-white">{repair.id}</td>
+                      <td className="px-6 py-4 text-sm text-gray-300">{repair.asset}</td>
+                      <td className="px-6 py-4 text-sm text-gray-300 max-w-xs">{repair.issue}</td>
+                      <td className="px-6 py-4">
+                        <span className={`inline-flex items-center gap-2 px-3 py-1 rounded-full text-xs font-medium border ${getStatusColor(repair.status)}`}>
+                          {getStatusIcon(repair.status)}
+                          {repair.status}
+                        </span>
+                      </td>
+                      <td className="px-6 py-4 text-sm text-gray-400">{repair.submitted}</td>
+                      <td className="px-6 py-4 text-sm text-gray-300">{repair.technician}</td>
+                    </motion.tr>
+                  ))}
+                </tbody>
+              </table>
+            </div>
           </div>
         </motion.div>
       </div>

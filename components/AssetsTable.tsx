@@ -1,52 +1,43 @@
 "use client";
-
 import { motion } from "framer-motion";
-import { Search, Laptop, Monitor, Mouse, Keyboard, CheckCircle, AlertCircle, Clock } from "lucide-react";
+import { Search, Laptop, Monitor, Keyboard, Mouse, Dock } from "lucide-react";
 import { useState } from "react";
 
 const mockAssets = [
-  { id: "LPT-001", type: "Laptop", model: "Dell Latitude 5420", serial: "DL5420-78923", status: "Active", assignedTo: "Sarah Johnson", location: "HQ - Floor 3" },
-  { id: "LPT-002", type: "Laptop", model: "HP EliteBook 840", serial: "HP840-45612", status: "Active", assignedTo: "Michael Chen", location: "HQ - Floor 2" },
-  { id: "LPT-003", type: "Laptop", model: "Lenovo ThinkPad X1", serial: "LN-X1-89234", status: "Maintenance", assignedTo: "Unassigned", location: "IT Storage" },
-  { id: "LPT-004", type: "Laptop", model: "Dell XPS 15", serial: "DL-XPS-12345", status: "Active", assignedTo: "Emily Rodriguez", location: "Remote" },
-  { id: "LPT-005", type: "Laptop", model: "HP ProBook 450", serial: "HP450-67890", status: "Active", assignedTo: "James Wilson", location: "HQ - Floor 1" },
-  { id: "MON-001", type: "Monitor", model: "LG UltraWide 34", serial: "LG34-23456", status: "Active", assignedTo: "Sarah Johnson", location: "HQ - Floor 3" },
-  { id: "MON-002", type: "Monitor", model: "Samsung 27 4K", serial: "SM27-78901", status: "Active", assignedTo: "Michael Chen", location: "HQ - Floor 2" },
-  { id: "MON-003", type: "Monitor", model: "LG 24 FHD", serial: "LG24-34567", status: "Active", assignedTo: "James Wilson", location: "HQ - Floor 1" },
-  { id: "MON-004", type: "Monitor", model: "Samsung Curved 32", serial: "SM32-90123", status: "Inactive", assignedTo: "Unassigned", location: "IT Storage" },
-  { id: "MON-005", type: "Monitor", model: "LG 27 QHD", serial: "LG27-45678", status: "Active", assignedTo: "Emily Rodriguez", location: "Remote" },
-  { id: "PER-001", type: "Keyboard", model: "Logitech MX Keys", serial: "LG-MX-56789", status: "Active", assignedTo: "Sarah Johnson", location: "HQ - Floor 3" },
-  { id: "PER-002", type: "Mouse", model: "Logitech MX Master 3", serial: "LG-MM3-67890", status: "Active", assignedTo: "Michael Chen", location: "HQ - Floor 2" },
-  { id: "PER-003", type: "Keyboard", model: "Logitech K380", serial: "LG-K380-78901", status: "Active", assignedTo: "Emily Rodriguez", location: "Remote" },
-  { id: "PER-004", type: "Mouse", model: "Logitech MX Anywhere 3", serial: "LG-MA3-89012", status: "Active", assignedTo: "James Wilson", location: "HQ - Floor 1" },
-  { id: "LPT-006", type: "Laptop", model: "Lenovo ThinkBook 15", serial: "LN-TB15-90123", status: "Active", assignedTo: "David Martinez", location: "HQ - Floor 2" }
+  { id: "BTC-LP-001", type: "Laptop", model: "Dell XPS 15", serial: "DXP15-2024-A1B2", status: "Assigned", assignedTo: "Sarah Johnson", purchaseDate: "2024-01-15" },
+  { id: "BTC-LP-002", type: "Laptop", model: "MacBook Pro 16", serial: "MBP16-2024-X9Y8", status: "Available", assignedTo: "-", purchaseDate: "2024-02-20" },
+  { id: "BTC-LP-003", type: "Laptop", model: "ThinkPad X1 Carbon", serial: "TPX1-2024-C3D4", status: "Assigned", assignedTo: "Michael Chen", purchaseDate: "2024-01-10" },
+  { id: "BTC-MN-001", type: "Monitor", model: "Dell UltraSharp 27", serial: "DUS27-2024-E5F6", status: "Assigned", assignedTo: "Sarah Johnson", purchaseDate: "2024-01-15" },
+  { id: "BTC-MN-002", type: "Monitor", model: "LG 32 4K", serial: "LG32-2024-G7H8", status: "Available", assignedTo: "-", purchaseDate: "2024-03-05" },
+  { id: "BTC-MN-003", type: "Monitor", model: "Samsung 34 Curved", serial: "SAM34-2024-I9J0", status: "In Repair", assignedTo: "Emily Rodriguez", purchaseDate: "2023-11-20" },
+  { id: "BTC-KB-001", type: "Keyboard", model: "Logitech MX Keys", serial: "LMXK-2024-K1L2", status: "Assigned", assignedTo: "David Park", purchaseDate: "2024-02-01" },
+  { id: "BTC-KB-002", type: "Keyboard", model: "Apple Magic Keyboard", serial: "AMKB-2024-M3N4", status: "Available", assignedTo: "-", purchaseDate: "2024-02-20" },
+  { id: "BTC-MS-001", type: "Mouse", model: "Logitech MX Master 3", serial: "LMX3-2024-O5P6", status: "Assigned", assignedTo: "Michael Chen", purchaseDate: "2024-01-10" },
+  { id: "BTC-MS-002", type: "Mouse", model: "Apple Magic Mouse", serial: "AMMS-2024-Q7R8", status: "Available", assignedTo: "-", purchaseDate: "2024-02-20" },
+  { id: "BTC-DK-001", type: "Docking Station", model: "Dell WD19TB", serial: "DWD19-2024-S9T0", status: "Assigned", assignedTo: "Sarah Johnson", purchaseDate: "2024-01-15" },
+  { id: "BTC-DK-002", type: "Docking Station", model: "CalDigit TS4", serial: "CTS4-2024-U1V2", status: "Available", assignedTo: "-", purchaseDate: "2024-03-01" },
+  { id: "BTC-LP-004", type: "Laptop", model: "HP EliteBook 840", serial: "HPE84-2024-W3X4", status: "In Repair", assignedTo: "James Wilson", purchaseDate: "2023-12-10" },
+  { id: "BTC-MN-004", type: "Monitor", model: "BenQ PD2700U", serial: "BPD27-2024-Y5Z6", status: "Assigned", assignedTo: "David Park", purchaseDate: "2024-02-01" },
+  { id: "BTC-KB-003", type: "Keyboard", model: "Keychron K8", serial: "KCK8-2024-A7B8", status: "Available", assignedTo: "-", purchaseDate: "2024-03-10" }
 ];
 
-const getStatusIcon = (status: string) => {
+const getStatusColor = (status: string) => {
   switch (status) {
-    case "Active":
-      return <CheckCircle className="w-5 h-5 text-green-400" />;
-    case "Maintenance":
-      return <Clock className="w-5 h-5 text-yellow-400" />;
-    case "Inactive":
-      return <AlertCircle className="w-5 h-5 text-red-400" />;
-    default:
-      return null;
+    case "Available": return "bg-green-500/20 text-green-400 border-green-500/30";
+    case "Assigned": return "bg-blue-500/20 text-blue-400 border-blue-500/30";
+    case "In Repair": return "bg-yellow-500/20 text-yellow-400 border-yellow-500/30";
+    default: return "bg-gray-500/20 text-gray-400 border-gray-500/30";
   }
 };
 
 const getTypeIcon = (type: string) => {
   switch (type) {
-    case "Laptop":
-      return <Laptop className="w-5 h-5 text-blue-400" />;
-    case "Monitor":
-      return <Monitor className="w-5 h-5 text-purple-400" />;
-    case "Keyboard":
-      return <Keyboard className="w-5 h-5 text-cyan-400" />;
-    case "Mouse":
-      return <Mouse className="w-5 h-5 text-pink-400" />;
-    default:
-      return null;
+    case "Laptop": return <Laptop className="w-4 h-4" />;
+    case "Monitor": return <Monitor className="w-4 h-4" />;
+    case "Keyboard": return <Keyboard className="w-4 h-4" />;
+    case "Mouse": return <Mouse className="w-4 h-4" />;
+    case "Docking Station": return <Dock className="w-4 h-4" />;
+    default: return <Laptop className="w-4 h-4" />;
   }
 };
 
@@ -54,114 +45,86 @@ export default function AssetsTable() {
   const [searchTerm, setSearchTerm] = useState("");
 
   const filteredAssets = mockAssets.filter(asset =>
-    Object.values(asset).some(value =>
-      value.toLowerCase().includes(searchTerm.toLowerCase())
-    )
+    asset.id.toLowerCase().includes(searchTerm.toLowerCase()) ||
+    asset.type.toLowerCase().includes(searchTerm.toLowerCase()) ||
+    asset.model.toLowerCase().includes(searchTerm.toLowerCase()) ||
+    asset.serial.toLowerCase().includes(searchTerm.toLowerCase()) ||
+    asset.assignedTo.toLowerCase().includes(searchTerm.toLowerCase())
   );
 
   return (
-    <section className="py-24 px-6 bg-[#09090B]">
-      <div className="max-w-7xl mx-auto">
-        <motion.div
-          initial={{ opacity: 0, y: 20 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.6 }}
-          className="mb-8"
-        >
-          <h2 className="text-4xl md:text-5xl font-bold text-white mb-4">
-            Assets Inventory
-          </h2>
-          <p className="text-gray-400 text-lg">
-            Track and manage all company assets
-          </p>
-        </motion.div>
-
-        <motion.div
-          initial={{ opacity: 0, y: 20 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.6, delay: 0.2 }}
-          className="mb-6"
-        >
-          <div className="relative">
-            <Search className="absolute left-4 top-1/2 transform -translate-y-1/2 w-5 h-5 text-gray-400" />
-            <input
-              type="text"
-              placeholder="Search assets..."
-              value={searchTerm}
-              onChange={(e) => setSearchTerm(e.target.value)}
-              className="w-full bg-white/5 backdrop-blur border border-white/10 rounded-xl pl-12 pr-4 py-3 text-white placeholder-gray-500 focus:outline-none focus:border-blue-500 transition-colors"
-            />
-          </div>
-        </motion.div>
-
-        <motion.div
-          initial={{ opacity: 0, y: 20 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.6, delay: 0.3 }}
-          className="bg-white/5 backdrop-blur border border-white/10 rounded-2xl overflow-hidden"
-        >
-          <div className="overflow-x-auto">
-            <table className="w-full">
-              <thead className="bg-white/5 border-b border-white/10">
-                <tr>
-                  <th className="px-6 py-4 text-left text-sm font-semibold text-gray-300">Asset ID</th>
-                  <th className="px-6 py-4 text-left text-sm font-semibold text-gray-300">Type</th>
-                  <th className="px-6 py-4 text-left text-sm font-semibold text-gray-300">Model</th>
-                  <th className="px-6 py-4 text-left text-sm font-semibold text-gray-300">Serial Number</th>
-                  <th className="px-6 py-4 text-left text-sm font-semibold text-gray-300">Status</th>
-                  <th className="px-6 py-4 text-left text-sm font-semibold text-gray-300">Assigned To</th>
-                  <th className="px-6 py-4 text-left text-sm font-semibold text-gray-300">Location</th>
-                </tr>
-              </thead>
-              <tbody className="divide-y divide-white/10">
-                {filteredAssets.map((asset, index) => (
-                  <motion.tr
-                    key={asset.id}
-                    initial={{ opacity: 0, y: 10 }}
-                    animate={{ opacity: 1, y: 0 }}
-                    transition={{ duration: 0.3, delay: index * 0.05 }}
-                    className="hover:bg-white/5 transition-colors"
-                  >
-                    <td className="px-6 py-4 text-sm text-blue-400 font-mono">{asset.id}</td>
-                    <td className="px-6 py-4">
-                      <div className="flex items-center gap-2">
-                        {getTypeIcon(asset.type)}
-                        <span className="text-sm text-white">{asset.type}</span>
-                      </div>
-                    </td>
-                    <td className="px-6 py-4 text-sm text-gray-300">{asset.model}</td>
-                    <td className="px-6 py-4 text-sm text-gray-400 font-mono">{asset.serial}</td>
-                    <td className="px-6 py-4">
-                      <div className="flex items-center gap-2">
-                        {getStatusIcon(asset.status)}
-                        <span className={`text-sm ${
-                          asset.status === "Active" ? "text-green-400" :
-                          asset.status === "Maintenance" ? "text-yellow-400" :
-                          "text-red-400"
-                        }`}>
-                          {asset.status}
-                        </span>
-                      </div>
-                    </td>
-                    <td className="px-6 py-4 text-sm text-gray-300">{asset.assignedTo}</td>
-                    <td className="px-6 py-4 text-sm text-gray-400">{asset.location}</td>
-                  </motion.tr>
-                ))}
-              </tbody>
-            </table>
-          </div>
-        </motion.div>
-
-        <motion.div
-          initial={{ opacity: 0 }}
-          animate={{ opacity: 1 }}
-          transition={{ duration: 0.6, delay: 0.4 }}
-          className="mt-6 flex items-center justify-between text-sm text-gray-400"
-        >
-          <p>Showing {filteredAssets.length} of {mockAssets.length} assets</p>
-          <p>Total Value: $127,450</p>
-        </motion.div>
+    <div className="w-full">
+      <div className="mb-6">
+        <div className="relative">
+          <Search className="absolute left-4 top-1/2 transform -translate-y-1/2 w-5 h-5 text-gray-400" />
+          <input
+            type="text"
+            placeholder="Search assets by ID, type, model, serial, or assignee..."
+            value={searchTerm}
+            onChange={(e) => setSearchTerm(e.target.value)}
+            className="w-full bg-[#1E293B] border border-white/10 rounded-xl pl-12 pr-4 py-3 text-white placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all"
+          />
+        </div>
       </div>
-    </section>
+
+      <motion.div
+        initial={{ opacity: 0, y: 20 }}
+        animate={{ opacity: 1, y: 0 }}
+        transition={{ duration: 0.5 }}
+        className="bg-[#1E293B] border border-white/10 rounded-xl overflow-hidden"
+      >
+        <div className="overflow-x-auto">
+          <table className="w-full">
+            <thead>
+              <tr className="border-b border-white/10">
+                <th className="text-left px-6 py-4 text-sm font-semibold text-gray-300">Asset ID</th>
+                <th className="text-left px-6 py-4 text-sm font-semibold text-gray-300">Type</th>
+                <th className="text-left px-6 py-4 text-sm font-semibold text-gray-300">Model</th>
+                <th className="text-left px-6 py-4 text-sm font-semibold text-gray-300">Serial Number</th>
+                <th className="text-left px-6 py-4 text-sm font-semibold text-gray-300">Status</th>
+                <th className="text-left px-6 py-4 text-sm font-semibold text-gray-300">Assigned To</th>
+                <th className="text-left px-6 py-4 text-sm font-semibold text-gray-300">Purchase Date</th>
+              </tr>
+            </thead>
+            <tbody>
+              {filteredAssets.map((asset, index) => (
+                <motion.tr
+                  key={asset.id}
+                  initial={{ opacity: 0, y: 10 }}
+                  animate={{ opacity: 1, y: 0 }}
+                  transition={{ duration: 0.3, delay: index * 0.05 }}
+                  className="border-b border-white/5 hover:bg-white/5 transition-colors"
+                >
+                  <td className="px-6 py-4">
+                    <span className="text-blue-400 font-mono text-sm">{asset.id}</span>
+                  </td>
+                  <td className="px-6 py-4">
+                    <div className="flex items-center gap-2 text-gray-300">
+                      {getTypeIcon(asset.type)}
+                      <span className="text-sm">{asset.type}</span>
+                    </div>
+                  </td>
+                  <td className="px-6 py-4 text-white text-sm">{asset.model}</td>
+                  <td className="px-6 py-4 text-gray-400 font-mono text-xs">{asset.serial}</td>
+                  <td className="px-6 py-4">
+                    <span className={`inline-flex items-center px-3 py-1 rounded-full text-xs font-medium border ${getStatusColor(asset.status)}`}>
+                      {asset.status}
+                    </span>
+                  </td>
+                  <td className="px-6 py-4 text-gray-300 text-sm">{asset.assignedTo}</td>
+                  <td className="px-6 py-4 text-gray-400 text-sm">{asset.purchaseDate}</td>
+                </motion.tr>
+              ))}
+            </tbody>
+          </table>
+        </div>
+
+        {filteredAssets.length === 0 && (
+          <div className="text-center py-12 text-gray-400">
+            No assets found matching your search.
+          </div>
+        )}
+      </motion.div>
+    </div>
   );
 }
